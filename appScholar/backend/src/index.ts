@@ -1,4 +1,4 @@
-import app from "./server";
+import app from "./types/server";
 
 const PORT = 3000;
 

@@ -7,16 +7,16 @@ export const Usuario = sequelize.define("Usuario", {
     autoIncrement: true,
     primaryKey: true,
   },
-    nome: {
+  nome: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-    email: {
+  email: {
     type: DataTypes.STRING,
     unique: true,
     allowNull: false,
-    },
-    senha: {
+  },
+  senha: {
     type: DataTypes.STRING,
     allowNull: false,
   },

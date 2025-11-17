@@ -1,48 +1,114 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
+import { TextInput, Button, Text, Card } from "react-native-paper";
 import api from "../services/api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import NotificationBanner from "../components/Notification";
+import ThemeToggle from "../components/ThemeToggle";
 
-export default function LoginScreen({ navigation }: any) {
+export default function LoginScreen({ navigation, toggleTheme }: any) {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
+    if (!email || !senha) {
+      setMessage("Preencha todos os campos!");
+      return;
+    }
+
+    setLoading(true);
     try {
       const res = await api.post("/auth/login", { email, senha });
-      console.log("Login: ", res.data);
-      navigation.navigate("Home", { perfil: res.data.perfil });
+      await AsyncStorage.setItem("token", res.data.token);
+      navigation.replace("Home", { perfil: res.data.perfil });
     } catch (err) {
-      setError("Senha ou E-mail incorretos");
+      setMessage("Senha ou E-mail incorretos");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <view style={styles.container}>
-      <Text style={styles.title}>Login Acadêmico</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="E-mail"
-        value={email}
-        onChangeText={setEmail}
+    <View style={styles.container}>
+      <View style={styles.topBar}>
+        <ThemeToggle toggleTheme={toggleTheme} />
+      </View>
+
+      <NotificationBanner
+        visible={!!message}
+        message={message}
+        onDismiss={() => setMessage("")}
       />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Senha"
-        secureTextEntry
-        value={senha}
-        onChangeText={setSenha}
-      />
-      {error ? <Text style={styles.error}>{error}</Text> : null}
-      <Button title="Entrar" onPress={handleLogin} />
-    </view>
+      <Card style={styles.card}>
+        <Card.Title title="Login Acadêmico" titleStyle={styles.title} />
+        <Card.Content>
+          <TextInput
+            label="E-mail"
+            mode="outlined"
+            value={email}
+            onChangeText={setEmail}
+            style={styles.input}
+            autoCapitalize="none"
+            keyboardType="email-address"
+          />
+
+          <TextInput
+            label="Senha"
+            mode="outlined"
+            secureTextEntry
+            value={senha}
+            onChangeText={setSenha}
+            style={styles.input}
+          />
+
+          <Button
+            mode="contained"
+            onPress={handleLogin}
+            loading={loading}
+            style={{ marginTop: 15 }}
+          >
+            Entrar
+          </Button>
+        </Card.Content>
+      </Card>
+
+      <Text style={styles.footerText}>
+        © 2025 AppScholar — Sistema Acadêmico
+      </Text>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", padding: 20 },
-  title: { fontSize: 24, marginBottom: 20, textAlign: "center" },
-  input: { borderWidth: 1, marginBottom: 10, padding: 10, borderRadius: 5 },
-  error: { color: "red", textAlign: "center" },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    padding: 20,
+    backgroundColor: "#fff",
+  },
+  topBar: {
+    position: "absolute",
+    top: 40,
+    right: 15,
+  },
+  card: {
+    padding: 10,
+    borderRadius: 10,
+  },
+  title: {
+    textAlign: "center",
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+  input: {
+    marginBottom: 10,
+  },
+  footerText: {
+    textAlign: "center",
+    marginTop: 20,
+    color: "#777",
+  },
 });

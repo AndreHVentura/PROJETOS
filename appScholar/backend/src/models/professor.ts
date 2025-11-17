@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/db";
 
-export const Aluno = sequelize.define("Aluno", {
+export const Professor = sequelize.define("Professor", {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -11,13 +11,10 @@ export const Aluno = sequelize.define("Aluno", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  matricula: {
+  titulacao: {
     type: DataTypes.STRING,
-    unique: true,
-    allowNull: false,
   },
-  curso: {
-    type: DataTypes.STRING,
-    allowNull: false,
+  tempoDocencia: {
+    type: DataTypes.INTEGER,
   },
 });
