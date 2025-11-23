@@ -35,13 +35,11 @@ export default function LoginScreen({ navigation, toggleTheme }: any) {
       <View style={styles.topBar}>
         <ThemeToggle toggleTheme={toggleTheme} />
       </View>
-
       <NotificationBanner
         visible={!!message}
         message={message}
         onDismiss={() => setMessage("")}
       />
-
       <Card style={styles.card}>
         <Card.Title title="Login Acadêmico" titleStyle={styles.title} />
         <Card.Content>
@@ -72,9 +70,15 @@ export default function LoginScreen({ navigation, toggleTheme }: any) {
           >
             Entrar
           </Button>
+          <Button
+            mode="text"
+            onPress={() => navigation.navigate("CadastroScreen")}
+            style={styles.linkButton}
+          >
+            Não tem conta? Cadastre-se
+          </Button>
         </Card.Content>
       </Card>
-
       <Text style={styles.footerText}>
         © 2025 AppScholar — Sistema Acadêmico
       </Text>
@@ -110,5 +114,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 20,
     color: "#777",
+  },
+  linkButton: {
+    padding: 10,
+    alignItems: "center",
+    marginTop: 20,
+  },
+  linkText: {
+    color: "#007AFF",
+    fontSize: 16,
   },
 });
