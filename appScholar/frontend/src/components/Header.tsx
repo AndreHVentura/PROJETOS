@@ -2,16 +2,24 @@ import React from "react";
 import {View, StyleSheet, Text} from "react-native";
 import { Button } from "react-native-paper";
 
-interface HeaderProps {
+interface CustomHeaderProps {
   title: string;
-  onLogout: () => void;
+  showLogout?: boolean;
+  onLogout?: () => void;
   showBackButton?: boolean;
   onBack?: () => void;
 }
 
-export default function Header({ title, onLogout, showBackButton = false, onBack }: HeaderProps) {
+export default function CustomHeader({ 
+  title, 
+  showLogout = false, 
+  onLogout,
+  showBackButton = false,
+  onBack 
+}: CustomHeaderProps) {
   return (
     <View style={styles.header}>
+      {/* Lado esquerdo - Botão Voltar */}
       <View style={styles.headerLeft}>
         {showBackButton && (
           <Button 
@@ -25,17 +33,22 @@ export default function Header({ title, onLogout, showBackButton = false, onBack
         )}
       </View>
       
+      {/* Centro - Título */}
       <Text style={styles.title}>{title}</Text>
       
+      {/* Lado direito - Toggle de Tema e/ou Sair */}
       <View style={styles.headerRight}>
-        <Button 
-          icon="logout" 
-          onPress={onLogout}
-          mode="text"
-          textColor="#FF3B30"
-        >
-          Sair
-        </Button>
+        {showLogout && (
+          <Button 
+            icon="logout" 
+            onPress={onLogout}
+            mode="text"
+            textColor="#FF3B30"
+            style={styles.logoutButton}
+          >
+            Sair
+          </Button>
+        )}
       </View>
     </View>
   );
@@ -53,15 +66,22 @@ const styles = StyleSheet.create({
   },
   headerLeft: {
     flex: 1,
+    alignItems: "flex-start",
   },
   headerRight: {
     flex: 1,
     alignItems: "flex-end",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    gap: 8,
   },
   title: {
     fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
     flex: 2,
+  },
+  logoutButton: {
+    marginLeft: 8,
   },
 });

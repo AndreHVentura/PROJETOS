@@ -5,10 +5,8 @@ import { TextInput, Button, Text, Card, RadioButton } from "react-native-paper";
 import api from "../services/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NotificationBanner from "../components/Notification";
-import ThemeToggle from "../components/ThemeToggle";
-import Header from "../components/Header";
 
-export default function CadastroScreen({ navigation, toggleTheme }: any) {
+export default function CadastroScreen({ navigation }: any) {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
@@ -71,17 +69,6 @@ export default function CadastroScreen({ navigation, toggleTheme }: any) {
 
   return (
     <View style={styles.container}>
-      <Header 
-        title="Cadastro" 
-        onLogout={() => navigation.replace("Login")} 
-        showBackButton={true}
-        onBack={() => navigation.goBack()}
-      />
-      
-      <View style={styles.topBar}>
-        <ThemeToggle toggleTheme={toggleTheme} />
-      </View>
-
       <NotificationBanner
         visible={!!message}
         message={message}

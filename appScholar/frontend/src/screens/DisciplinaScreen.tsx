@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, ScrollView, StyleSheet } from "react-native";
-import { Button } from "react-native-paper";
+import { Button, Card } from "react-native-paper";
 import api from "../services/api";
-import Header from "../components/Header";
-import ThemeToggle from "../components/ThemeToggle";
+import CustomHeader from "../components/Header";
 import NotificationBanner from "../components/Notification";
 import MenuCard from "../components/MenuCard";
 
-export default function DisciplinaScreen({ navigation, toggleTheme }: any) {
+export default function DisciplinaScreen({ navigation }: any) {
   const [nome, setNome] = useState("");
   const [cargaHoraria, setCargaHoraria] = useState("");
   const [disciplinas, setDisciplinas] = useState<any[]>([]);
@@ -47,14 +46,12 @@ export default function DisciplinaScreen({ navigation, toggleTheme }: any) {
 
   return (
     <View style={styles.container}>
-      <Header
-        title="Cadastro de Disciplinas"
-        onLogout={() => navigation.replace("Login")}
+      <CustomHeader 
+        title="Cadastro de Disciplinas" 
+        showLogout={false}
+        showBackButton={true}
+        onBack={() => navigation.goBack()}
       />
-
-      <View style={styles.topBar}>
-        <ThemeToggle toggleTheme={toggleTheme} />
-      </View>
 
       <NotificationBanner
         visible={!!message}
@@ -62,61 +59,107 @@ export default function DisciplinaScreen({ navigation, toggleTheme }: any) {
         onDismiss={() => setMessage("")}
       />
 
-      <ScrollView contentContainerStyle={{ padding: 20 }}>
-        <Text style={styles.title}>Cadastrar Nova Disciplina</Text>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <Card style={styles.card}>
+          <Card.Content>
+            <Text style={styles.sectionTitle}>Cadastrar Nova Disciplina</Text>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Nome da Disciplina"
-          value={nome}
-          onChangeText={setNome}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Carga Horária"
-          keyboardType="numeric"
-          value={cargaHoraria}
-          onChangeText={setCargaHoraria}
-        />
+            <TextInput
+              style={styles.input}
+              placeholder="Nome da Disciplina"
+              value={nome}
+              onChangeText={setNome}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Carga Horária"
+              keyboardType="numeric"
+              value={cargaHoraria}
+              onChangeText={setCargaHoraria}
+            />
 
-        <Button mode="contained" onPress={cadastrar} style={{ marginTop: 10 }}>
-          Cadastrar
-        </Button>
+            <Button 
+              mode="contained" 
+              onPress={cadastrar} 
+              style={styles.button}
+            >
+              Cadastrar
+            </Button>
+          </Card.Content>
+        </Card>
 
-        <Text style={styles.subtitle}>Disciplinas Cadastradas</Text>
+        <Card style={styles.card}>
+          <Card.Content>
+            <Text style={styles.sectionTitle}>Disciplinas Cadastradas</Text>
+            
+            <Button 
+              mode="outlined" 
+              onPress={() => navigation.navigate("ListaDisciplinas")}
+              style={styles.listButton}
+              icon="format-list-bulleted"
+            >
+              Ver Lista Completa de Disciplinas
+            </Button>
 
-        {disciplinas.map((d) => (
-          <MenuCard
-            key={d.id}
-            title={d.nome}
-            subtitle={`${d.carga_horaria || d.cargaHoraria} horas`}
-            icon="book-open-page-variant"
-          />
-        ))}
+            {disciplinas.slice(0, 3).map((d) => (
+              <MenuCard
+                key={d.id}
+                title={d.nome}
+                subtitle={`${d.carga_horaria || d.cargaHoraria} horas`}
+                icon="book-open-page-variant"
+                onPress={() => {}}
+                color="#2196F3"
+              />
+            ))}
+            
+            {disciplinas.length > 3 && (
+              <Text style={styles.moreItems}>
+                +{disciplinas.length - 3} disciplinas cadastradas
+              </Text>
+            )}
+          </Card.Content>
+        </Card>
       </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
-  topBar: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    paddingHorizontal: 15,
+  container: { 
+    flex: 1, 
+    backgroundColor: "#fff" 
   },
-  title: { fontSize: 20, marginBottom: 15, fontWeight: "600" },
-  subtitle: {
+  scrollContent: {
+    padding: 20,
+  },
+  card: {
+    marginBottom: 20,
+    elevation: 3,
+  },
+  sectionTitle: {
     fontSize: 18,
-    marginTop: 25,
-    marginBottom: 10,
     fontWeight: "bold",
+    marginBottom: 15,
+    color: "#333",
   },
   input: {
     borderWidth: 1,
     borderColor: "#ccc",
-    padding: 10,
+    padding: 12,
     marginBottom: 10,
     borderRadius: 5,
+    backgroundColor: "#f9f9f9",
+  },
+  button: {
+    marginTop: 10,
+  },
+  listButton: {
+    marginBottom: 15,
+  },
+  moreItems: {
+    textAlign: "center",
+    color: "#2196F3",
+    marginTop: 10,
+    fontStyle: "italic",
   },
 });

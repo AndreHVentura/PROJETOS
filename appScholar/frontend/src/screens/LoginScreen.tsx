@@ -4,9 +4,8 @@ import { TextInput, Button, Text, Card } from "react-native-paper";
 import api from "../services/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NotificationBanner from "../components/Notification";
-import ThemeToggle from "../components/ThemeToggle";
 
-export default function LoginScreen({ navigation, toggleTheme }: any) {
+export default function LoginScreen({ navigation }: any) {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [message, setMessage] = useState("");
@@ -32,9 +31,6 @@ export default function LoginScreen({ navigation, toggleTheme }: any) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.topBar}>
-        <ThemeToggle toggleTheme={toggleTheme} />
-      </View>
       <NotificationBanner
         visible={!!message}
         message={message}
@@ -80,7 +76,7 @@ export default function LoginScreen({ navigation, toggleTheme }: any) {
         </Card.Content>
       </Card>
       <Text style={styles.footerText}>
-        © 2025 AppScholar — Sistema Acadêmico
+        © 2025 AppScholar — Sistema Acadêmico - André Ventura
       </Text>
     </View>
   );

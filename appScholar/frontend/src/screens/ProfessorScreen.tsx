@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, ScrollView, StyleSheet } from "react-native";
-import { Button } from "react-native-paper";
+import { Button, Card } from "react-native-paper";
 import api from "../services/api";
-import Header from "../components/Header";
-import ThemeToggle from "../components/ThemeToggle";
-import MenuCard from "../components/MenuCard";
+import CustomHeader from "../components/Header";
 import NotificationBanner from "../components/Notification";
+import MenuCard from "../components/MenuCard";
 
-export default function ProfessorScreen({ navigation, toggleTheme }: any) {
+export default function ProfessorScreen({ navigation }: any) {
   const [nome, setNome] = useState("");
   const [titulacao, setTitulacao] = useState("");
   const [tempo, setTempo] = useState("");
@@ -51,55 +50,85 @@ export default function ProfessorScreen({ navigation, toggleTheme }: any) {
 
   return (
     <View style={styles.container}>
-      <Header
+      <CustomHeader 
         title="Cadastro de Professores"
-        onLogout={() => navigation.replace("Login")}
+        showLogout={false}
+        showBackButton={true}
+        onBack={() => navigation.goBack()}
       />
-      <View style={styles.topBar}>
-        <ThemeToggle toggleTheme={toggleTheme} />
-      </View>
+
       <NotificationBanner
         visible={!!message}
         message={message}
         onDismiss={() => setMessage("")}
       />
-      <ScrollView contentContainerStyle={{ padding: 20 }}>
-        <Text style={styles.title}>Cadastrar Novo Professor</Text>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Nome"
-          value={nome}
-          onChangeText={setNome}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Titulação"
-          value={titulacao}
-          onChangeText={setTitulacao}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Tempo de Docência"
-          keyboardType="numeric"
-          value={tempo}
-          onChangeText={setTempo}
-        />
-        <Button mode="contained" onPress={cadastrar} style={{ marginTop: 10 }}>
-          Cadastrar
-        </Button>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <Card style={styles.card}>
+          <Card.Content>
+            <Text style={styles.sectionTitle}>Cadastrar Novo Professor</Text>
 
-        <Text style={styles.subtitle}>Professores Cadastrados</Text>
-        {professores.map((p) => (
-          <MenuCard
-            key={p.id}
-            title={p.nome}
-            subtitle={`${p.titulacao} • ${
-              p.tempo_docencia || p.tempoDocencia
-            } anos`}
-            icon="school-outline"
-          />
-        ))}
+            <TextInput
+              style={styles.input}
+              placeholder="Nome"
+              value={nome}
+              onChangeText={setNome}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Titulação"
+              value={titulacao}
+              onChangeText={setTitulacao}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Tempo de Docência (anos)"
+              keyboardType="numeric"
+              value={tempo}
+              onChangeText={setTempo}
+            />
+            
+            <Button 
+              mode="contained" 
+              onPress={cadastrar} 
+              style={styles.button}
+            >
+              Cadastrar
+            </Button>
+          </Card.Content>
+        </Card>
+
+        <Card style={styles.card}>
+          <Card.Content>
+            <Text style={styles.sectionTitle}>Professores Cadastrados</Text>
+            
+            <Button 
+              mode="outlined" 
+              onPress={() => navigation.navigate("ListaProfessores")}
+              style={styles.listButton}
+              icon="format-list-bulleted"
+            >
+              Ver Lista Completa de Professores
+            </Button>
+
+            {professores.slice(0, 3).map((p) => (
+              <MenuCard
+                key={p.id}
+                title={p.nome}
+                subtitle={`${p.titulacao} • ${p.tempo_docencia || p.tempoDocencia} anos`}
+                icon="school"
+                onPress={() => {}}
+                color="#FF9800"
+              />
+            ))}
+            
+            {professores.length > 3 && (
+              <Text style={styles.moreItems}>
+                +{professores.length - 3} professores cadastrados
+              </Text>
+            )}
+          </Card.Content>
+        </Card>
       </ScrollView>
     </View>
   );
@@ -110,27 +139,37 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
-  topBar: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    paddingHorizontal: 15,
+  scrollContent: {
+    padding: 20,
   },
-  title: {
-    fontSize: 20,
-    marginBottom: 15,
-    fontWeight: "600",
+  card: {
+    marginBottom: 20,
+    elevation: 3,
   },
-  subtitle: {
+  sectionTitle: {
     fontSize: 18,
-    marginTop: 25,
-    marginBottom: 10,
     fontWeight: "bold",
+    marginBottom: 15,
+    color: "#333",
   },
   input: {
     borderWidth: 1,
     borderColor: "#ccc",
-    padding: 10,
+    padding: 12,
     marginBottom: 10,
     borderRadius: 5,
+    backgroundColor: "#f9f9f9",
+  },
+  button: {
+    marginTop: 10,
+  },
+  listButton: {
+    marginBottom: 15,
+  },
+  moreItems: {
+    textAlign: "center",
+    color: "#2196F3",
+    marginTop: 10,
+    fontStyle: "italic",
   },
 });
