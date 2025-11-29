@@ -27,3 +27,29 @@ export const obterDisciplinaPorId = async (req: Request, res: Response) => {
     res.status(404).json({ error: "Disciplina não encontrada" });
   }
 };
+
+export const listarDisciplinasPorProfessor = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { professorId } = req.params;
+
+    const disciplinas = await Disciplina.findAll({
+      where: { professorId },
+      include: [
+        {
+          model: Professor,
+          attributes: ["id", "nome", "email"],
+        },
+      ],
+    });
+
+    res.json(disciplinas);
+  } catch (error) {
+    res.status(500).json({
+      error: "Erro ao buscar disciplinas do professor",
+      detalhes: error,
+    });
+  }
+};

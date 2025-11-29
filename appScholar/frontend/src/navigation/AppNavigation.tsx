@@ -12,6 +12,9 @@ import CadastroScreen from "../screens/CadastroScreen";
 import ListaAlunosScreen from "../screens/ListaAluno";
 import ListaProfessoresScreen from "../screens/ListaProfessor";
 import ListaDisciplinasScreen from "../screens/ListaDisciplina";
+import LancarNotasScreen from "../screens/NotaScreen";
+import NotarNotasDisciplinaScreen from "../screens/LancarNotasScreen";
+import LancarNotasDisciplinaScreen from "../screens/LancarNotasScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -101,6 +104,20 @@ export default function AppNavigator({
         >
           {({ navigation }) => (
             <ListaDisciplinasScreen navigation={navigation} />
+          )}
+        </Stack.Screen>
+        <Stack.Screen
+          name="LancarNotasScreen"
+          options={{ title: "Lançar Notas" }}
+        >
+          {({ navigation }) => <LancarNotasScreen navigation={navigation} />}
+        </Stack.Screen>
+        <Stack.Screen
+          name="LancarNotasDisciplinaScreen"
+          options={{ title: "Lançar Notas da Disciplina" }}
+        >
+          {({ navigation }) => (
+            <LancarNotasDisciplinaScreen navigation={navigation} />
           )}
         </Stack.Screen>
       </Stack.Navigator>
