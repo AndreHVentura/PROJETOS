@@ -1,7 +1,8 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/db";
+import { AlunoInstance, AlunoAttributes } from "../types/sequelize";
 
-export const Aluno = sequelize.define("Aluno", {
+export const Aluno = sequelize.define<AlunoInstance>("Aluno", {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,

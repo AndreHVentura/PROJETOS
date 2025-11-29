@@ -1,4 +1,4 @@
-import app, { syncDatabase } from "./types/server";
+import app, { initializeDatabase } from "./types/server";
 import { connectBD } from "./config/db";
 
 const PORT = process.env.PORT || 3000;
@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 3000;
 const startServer = async () => {
   try {
     await connectBD();
-    await syncDatabase();
+    await initializeDatabase();
     
     app.listen(PORT, () => {
       console.log(`Servidor rodando na porta ${PORT}`);

@@ -11,10 +11,25 @@ export const Professor = sequelize.define("Professor", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  matricula: {
+    type: DataTypes.STRING,
+    unique: true,
+    allowNull: false,
+  },
   titulacao: {
     type: DataTypes.STRING,
   },
   tempoDocencia: {
     type: DataTypes.INTEGER,
   },
+  areaAtuacao: {
+    type: DataTypes.STRING,
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      isEmail: true
+    }
+  }
 });

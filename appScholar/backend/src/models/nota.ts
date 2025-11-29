@@ -2,12 +2,29 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../config/db";
 import { Aluno } from "./aluno";
 import { Disciplina } from "./disciplina";
+import { NotaInstance, NotaAttributes } from "../types/sequelize";
 
-export const Nota = sequelize.define("Nota", {
+export const Nota = sequelize.define<NotaInstance>("Nota", {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
+  },
+  alunoId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: Aluno,
+      key: 'id'
+    }
+  },
+  disciplinaId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: Disciplina,
+      key: 'id'
+    }
   },
   nota1: {
     type: DataTypes.FLOAT,
@@ -30,7 +47,7 @@ export const Nota = sequelize.define("Nota", {
     allowNull: false,
   },
   media: {
-    type: DataTypes.FLOAT,
+    type: DataTypes.FLOAT, 
     allowNull: false,
   },
   situacao: {
