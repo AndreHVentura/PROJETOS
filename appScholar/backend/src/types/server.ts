@@ -40,7 +40,7 @@ app.get("/api/health", (req, res) => {
 const initializeDatabase = async () => {
   try {
     await connectBD();
-    await sequelize.sync({ force: false });
+    await sequelize.sync({ force: true }); // Sincroniza todos os modelos
     console.log("✅ Modelos sincronizados com o banco de dados.");
     
     const adminExists = await Usuario.findOne({ 
