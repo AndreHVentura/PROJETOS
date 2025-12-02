@@ -21,8 +21,8 @@ export default function LancarNotasScreen({ navigation }: any) {
   const carregarDisciplinasProfessor = async () => {
     try {
       setLoading(true);
-      // Buscar disciplinas do professor logado
-      const res = await api.get(`/disciplina/professor/${user?.id}`);
+      // CORREÇÃO: Usar o endpoint correto que você criou no back-end
+      const res = await api.get("/nota/professor/disciplinas");
       setDisciplinas(res.data);
       setMessage("");
     } catch (error) {
@@ -37,8 +37,8 @@ export default function LancarNotasScreen({ navigation }: any) {
     carregarDisciplinasProfessor();
   }, []);
 
-  const handleLancarNotas = (disciplinaId: number, disciplinaNome: string) => {
-    navigation.navigate("LancarNotasDisciplinaScreen", {
+ const handleLancarNotas = (disciplinaId: number, disciplinaNome: string) => {
+    navigation.navigate("AlunosDisciplina", {
       disciplinaId,
       disciplinaNome,
     });
@@ -47,7 +47,7 @@ export default function LancarNotasScreen({ navigation }: any) {
   return (
     <View style={styles.container}>
       <CustomHeader
-        title="Lançar Notas"
+        title="Lançar Notas (Lista)"
         showLogout={false}
         showBackButton={true}
         onBack={() => navigation.goBack()}
@@ -66,7 +66,7 @@ export default function LancarNotasScreen({ navigation }: any) {
               Minhas Disciplinas ({disciplinas.length})
             </Text>
             <Text style={styles.subtitle}>
-              Selecione uma disciplina para lançar notas
+              Selecione uma disciplina para ver alunos e lançar notas
             </Text>
 
             {loading ? (
@@ -103,9 +103,9 @@ export default function LancarNotasScreen({ navigation }: any) {
                           handleLancarNotas(disciplina.id, disciplina.nome)
                         }
                         style={styles.button}
-                        icon="note-plus"
+                        icon="account-group"
                       >
-                        Notas
+                        Alunos
                       </Button>
                     </DataTable.Cell>
                   </DataTable.Row>
@@ -122,6 +122,15 @@ export default function LancarNotasScreen({ navigation }: any) {
                 )}
               </DataTable>
             )}
+
+            <Button
+              mode="outlined"
+              onPress={carregarDisciplinasProfessor}
+              style={styles.refreshButton}
+              icon="refresh"
+            >
+              Atualizar
+            </Button>
           </Card.Content>
         </Card>
       </ScrollView>
@@ -178,5 +187,8 @@ const styles = StyleSheet.create({
     color: "#666",
     fontStyle: "italic",
     padding: 20,
+  },
+  refreshButton: {
+    marginTop: 16,
   },
 });

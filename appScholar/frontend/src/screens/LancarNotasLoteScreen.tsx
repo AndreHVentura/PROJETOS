@@ -1,4 +1,4 @@
-// screens/LancarNotasDisciplinaScreen.tsx - CORRIGIDO
+
 import React, { useState, useEffect } from "react";
 import { View, ScrollView, StyleSheet, Alert } from "react-native";
 import {

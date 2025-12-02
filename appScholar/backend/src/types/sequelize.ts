@@ -12,7 +12,7 @@ export interface AlunoAttributes {
 
 export interface AlunoCreationAttributes extends Optional<AlunoAttributes, 'id'> {}
 
-export interface AlunoInstance extends Model<AlunoAttributes, AlunoCreationAttributes>, AlunoAttributes {}
+export interface AlunoInstance extends Model<AlunoAttributes, AlunoCreationAttributes>, AlunoAttributes { notas?: NotaInstance[];}
 
 // Interface para Nota
 export interface NotaAttributes {
@@ -32,7 +32,10 @@ export interface NotaAttributes {
 
 export interface NotaCreationAttributes extends Optional<NotaAttributes, 'id'> {}
 
-export interface NotaInstance extends Model<NotaAttributes, NotaCreationAttributes>, NotaAttributes {}
+export interface NotaInstance extends Model<NotaAttributes, NotaCreationAttributes>, NotaAttributes {
+  aluno?: AlunoInstance;
+  disciplina?: DisciplinaInstance;
+}
 
 // Interface para Disciplina
 export interface DisciplinaAttributes {
@@ -46,4 +49,7 @@ export interface DisciplinaAttributes {
 
 export interface DisciplinaCreationAttributes extends Optional<DisciplinaAttributes, 'id'> {}
 
-export interface DisciplinaInstance extends Model<DisciplinaAttributes, DisciplinaCreationAttributes>, DisciplinaAttributes {}
+export interface DisciplinaInstance extends Model<DisciplinaAttributes, DisciplinaCreationAttributes>, DisciplinaAttributes {
+  professor?: any;
+  notas?: NotaInstance[];
+}

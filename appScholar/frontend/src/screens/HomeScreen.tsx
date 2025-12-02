@@ -1,4 +1,4 @@
-// screens/HomeScreen.tsx
+
 import React, { useState } from "react";
 import { Text, StyleSheet, ScrollView, SafeAreaView } from "react-native";
 import { useAuth } from "../hooks/useAuth";
@@ -6,7 +6,7 @@ import CustomHeader from "../components/Header";
 import MenuCard from "../components/MenuCard";
 import NotificationBanner from "../components/Notification";
 
-export default function HomeScreen({ navigation, toggleTheme }: any) {
+export default function HomeScreen({ navigation }: any) {
   const [showBanner, setShowBanner] = useState(true);
   const { user, logout } = useAuth();
 
@@ -52,13 +52,33 @@ export default function HomeScreen({ navigation, toggleTheme }: any) {
           />
         )}
 
-        {canAccess(["admin"]) && (
+        {canAccess(["admin", "professor"]) && (
           <MenuCard
             title="Gerenciar Disciplinas"
             subtitle="Cadastrar e visualizar disciplinas"
             icon="book-open-page-variant"
             onPress={() => navigation.navigate("DisciplinaScreen")}
             color="#2196F3" // Azul
+          />
+        )}
+
+        {canAccess(["professor", "admin"]) && (
+          <MenuCard
+            title="Lançar Notas"
+            subtitle="Registrar notas dos alunos"
+            icon="note-plus"
+            onPress={() => navigation.navigate("ProfessorDisciplinas")}
+            color="#FF5722" 
+          />
+        )}
+
+        {canAccess(["admin", "professor"]) && (
+          <MenuCard
+            title="Notas (Lista)"
+            subtitle="Ver todas as notas"
+            icon="clipboard-list"
+            onPress={() => navigation.navigate("NotaScreen")}
+            color="#9C27B0" // Roxo
           />
         )}
 

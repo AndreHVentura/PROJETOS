@@ -5,7 +5,6 @@ import { Usuario } from "../models/usuario";
 import { Aluno } from "../models/aluno";
 import { Professor } from "../models/professor";
 import { Disciplina } from "../models/disciplina";
-import { Nota } from "../models/nota";
 
 const app = express();
 app.use(cors({
@@ -40,14 +39,18 @@ app.get("/api/health", (req, res) => {
 const initializeDatabase = async () => {
   try {
     await connectBD();
-    await sequelize.sync({ force: true }); // Sincroniza todos os modelos
-    console.log("✅ Modelos sincronizados com o banco de dados.");
     
+    await sequelize.sync({ alter: true });
+    
+    console.log("✅ Modelos sincronizados (mantendo dados existentes).");
+    
+    // Verificar se admin já existe
     const adminExists = await Usuario.findOne({ 
       where: { email: "admin@scholar.com" } 
     });
     
     if (!adminExists) {
+      // Criar apenas se não existir
       const bcrypt = require("bcryptjs");
       const senhaHash = await bcrypt.hash("admin123", 10);
       
@@ -57,22 +60,21 @@ const initializeDatabase = async () => {
         senha: senhaHash,
         perfil: "admin"
       });
-      console.log("✅ Usuário admin padrão criado: admin@scholar.com");
-    } else {
-      console.log("✅ Usuário admin já existe: admin@scholar.com");
+      console.log("✅ Usuário admin criado");
     }
-
-    // 4. Verificar se os modelos estão acessíveis
-    console.log("✅ Modelos carregados:");
-    console.log("   - Usuario:", !!Usuario);
-    console.log("   - Aluno:", !!Aluno);
-    console.log("   - Professor:", !!Professor);
-    console.log("   - Disciplina:", !!Disciplina);
-    console.log("   - Nota:", !!Nota);
+    
+    // Verificar se há dados para popular apenas se necessário
+    const totalAlunos = await Aluno.count();
+    const totalProfessores = await Professor.count();
+    const totalDisciplinas = await Disciplina.count();
+    
+    console.log(`📊 Dados atuais no banco:`);
+    console.log(`   - Alunos: ${totalAlunos}`);
+    console.log(`   - Professores: ${totalProfessores}`);
+    console.log(`   - Disciplinas: ${totalDisciplinas}`);
     
   } catch (error) {
     console.error("❌ Erro ao inicializar banco de dados:", error);
-    process.exit(1); // Encerra o aplicativo em caso de erro crítico
   }
 };
 
